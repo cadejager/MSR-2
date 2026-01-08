@@ -157,6 +157,34 @@ number:
     update_interval: never
     step: 0.1
     mode: box
+  - platform: template
+    name: SCD40 Temperature Offset
+    id: scd40_temperature_offset
+    restore_value: true
+    initial_value: 18.86
+    min_value: -70.0
+    max_value: 70.0
+    entity_category: "CONFIG"
+    unit_of_measurement: "°C"
+    optimistic: true
+    update_interval: never
+    step: 0.1
+    mode: box
+    disabled_by_default: true
+  - platform: template
+    name: SCD40 Humidity Offset
+    id: scd40_humidity_offset
+    restore_value: true
+    initial_value: 0
+    min_value: -70.0
+    max_value: 70.0
+    entity_category: "CONFIG"
+    unit_of_measurement: "%"
+    optimistic: true
+    update_interval: never
+    step: 0.1
+    mode: box
+    disabled_by_default: true
 # Setting start of zone 1 occupancy
   - platform: template
     name: "Radar Zone 1 Start"
@@ -364,6 +392,18 @@ sensor:
     co2:
       name: "CO2"
       id: "co2"
+    temperature:
+      name: "SCD40 Temperature"
+      id: scd40_temperature
+      disabled_by_default: true
+      filters:
+        - lambda: return x - id(scd40_temperature_offset).state;
+    humidity:
+      name: "SCD40 Humidity"
+      id: scd40_humidity
+      disabled_by_default: true
+      filters:
+        - lambda: return x - id(scd40_humidity_offset).state;
     automatic_self_calibration: false
     update_interval: 60s
     measurement_mode: "periodic"
